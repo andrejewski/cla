@@ -97,7 +97,7 @@ function optionTitle(option, command) {
   const {name, type, description} = option;
   const names = directRefs(option, command).concat(name);
   let title = `${name.join(', ')}`;
-  if(type.name !== 'Empty') title + ` ${type.name}`;
+  if(type.parameters) title + ` ${type.parameters}`;
   let lines = [title];
   if(description) lines.push(indent(description));
   return lines;

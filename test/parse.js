@@ -3,7 +3,7 @@ const cla = require('..');
 const assert = require('assert');
 
 describe('parse(command Command, args Array<string>) options Object', () => {
-  const {parse, Alias, Command, Flag, Option, Types} = cla;
+  const {parse, Alias, Command, Flag, Option, Type} = cla;
 
   it('should use process.argv when args are unspecified', () => {
     const oldArgv = process.argv;
@@ -34,7 +34,7 @@ describe('parse(command Command, args Array<string>) options Object', () => {
       const force = Option({
         name: '--force',
         key: 'force',
-        type: Types.Empty(true)
+        type: Type.Empty(true)
       });
 
       const F = Alias('F', force);
@@ -51,7 +51,7 @@ describe('parse(command Command, args Array<string>) options Object', () => {
       const silent = Option({
         name: '--silent',
         key: 'silent',
-        type: Types.Empty(true)
+        type: Type.Empty(true)
       });
       const s = Alias('s', silent);
       const ss = Alias('ss', s);
@@ -79,7 +79,7 @@ describe('parse(command Command, args Array<string>) options Object', () => {
       const force = Option({
         name: '--force',
         key: 'force',
-        type: Types.Empty(true)
+        type: Type.Empty(true)
       });
       const F = Alias('F', force);
       const sh = Command({
@@ -96,7 +96,7 @@ describe('parse(command Command, args Array<string>) options Object', () => {
       const name = Option({
         name: '--name',
         key: 'name',
-        type: Types.String
+        type: Type.String
       });
       const a = Flag('-a', [name, 'alyssa']);
       const b = Flag('-b', [name, 'bernie']);
@@ -114,7 +114,7 @@ describe('parse(command Command, args Array<string>) options Object', () => {
       const name = Option({
         name: '--name',
         key: 'name',
-        type: Types.String
+        type: Type.String
       });
       const a = Flag('-a', [name, 'alyssa']);
       const n = Flag('-n', [name]);
@@ -137,7 +137,7 @@ describe('parse(command Command, args Array<string>) options Object', () => {
       const name = Option({
         name: '--name',
         key: 'name',
-        type: Types.String
+        type: Type.String
       });
       const sh = Command({
         name: 'sh', 
@@ -155,7 +155,7 @@ describe('parse(command Command, args Array<string>) options Object', () => {
       const name = Option({
         name: '--name',
         key: 'name',
-        type: Types.String,
+        type: Type.String,
         defaultValue: 'chris'
       });
       const sh = Command({
@@ -170,7 +170,7 @@ describe('parse(command Command, args Array<string>) options Object', () => {
       const name = Option({
         name: '--name',
         key: 'name',
-        type: Types.String,
+        type: Type.String,
         defaultValue: 'chris'
       });
       const sh = Command({
@@ -185,7 +185,7 @@ describe('parse(command Command, args Array<string>) options Object', () => {
       const name = Option({
         name: '--name',
         key: 'name',
-        type: Types.String
+        type: Type.String
       });
       const sh = Command({
         name: 'sh',

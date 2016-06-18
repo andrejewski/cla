@@ -1,7 +1,7 @@
-# cla
+# Command-Line Awesome
 
-**C**ommand-**L**ine **A**wesome (`cla`) is the best command-line
-options parser ever designed in the entire world by anyone who is me.
+Command-Line Awesome is the best command-line options parser
+ever designed in the entire world by anyone who is me.
 
 ```sh
 npm install --global cla
@@ -14,9 +14,9 @@ npm install --global cla
 - Modular [sub]command definitions
 - Flag group expansions `-abc => -a -b -c`
 - Double dash `--` ends parsing (by default)
-- Type coersion and type system for option arguments
+- Type coersion and extensible type system for option arguments
 - Optional Express-style `Runner` for command paths
-- Optional automatic `help` command
+- Optional automatic `help` output generator
 - Strict parsing: unknown options are not parsed
 - Does not modify `process.argv`
 - 3x shorter to type than `commander`
@@ -26,13 +26,13 @@ npm install --global cla
 A simple echo command with an option to shout.
 
 ```js
-const {parse, Command, Option, Types} = require('cla');
+const {parse, Command, Option, Type} = require('cla');
 
 const Shout = Option({
   name: '--shout',
   description: 'say it annoyingly loud',
   key: 'shout',
-  type: Types.Empty(true)
+  type: Type.Empty(true)
 });
 
 const Echo = Command({
