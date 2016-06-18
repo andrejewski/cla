@@ -63,40 +63,18 @@ echo please do not --shout
 # => "PLEASE DO NOT"
 ```
 
-## Routing
+## Contributing
 
-Included routing for commands and subcommands is inspired by
-how you would create Connect/Express routes. This `Runner` utility
-is completely optional and not needed to use `cla`.
+Contributions are incredibly welcome as long as they are standardly applicable
+and pass the tests (or break bad ones). Tests are written in Mocha and
+assertions are done with the Node.js core `assert` module.
 
-```js
-const {parse, Runner} = require('cla');
-const npm = require('./npm-command);
-const npmInstall = require('./npm-install-command');
-const npmUpdate = require('./npm-update-command');
-const options = parse(command);
-
-Runner()
-  .use((options, next) => {
-    // process options and call next to go to the next route
-    // use next(error) to stop processing
-    next();
-  })
-  .use(npmInstall, (options, next) => {
-    // this will only be run if the install subcommand is used
-    next();
-  })
-  .use('install', (options, next) => {
-    // command names are equivalent but less modular
-    next();
-  })
-  .use(npmUpdate, Runner()
-    .use((options, next) => {
-      // runners can be nested for even more modularity
-    }))
-  .run(options, (error) => {
-    // any error will stop processing and call this callback
-    // it will also be called if the end of routes is reached
-  });
+```bash
+# running tests
+npm run test
 ```
+
+Follow me on [Twitter](https://twitter.com/compooter) for updates or just for
+the lolz and please check out my other [repositories](https://github.com/andrejewski)
+ if I have earned it. I thank you for reading.
 

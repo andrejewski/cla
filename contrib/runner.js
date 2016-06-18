@@ -17,7 +17,7 @@ Runner.prototype.run = function run(options, callback) {
   const command = options.path.shift();
   run(this.routes, options, function() {
     options.path.unshift(command);
-    callback(...arguments);
+    if(callback) callback(...arguments);
   });
 }
 
