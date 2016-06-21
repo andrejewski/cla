@@ -74,7 +74,7 @@ like they read.**
 
 Throughout these feature explanations "atomics" describe the constructs of
 the parser which include `Alias`, `Command`, `Flag`, and `Option`.
-When demoing the `parse` command `['!', '@', ...]` is meant to convey the
+When demoing the `parse` command, `[,, ...]` is meant to convey the
 first two arguments of `process.argv` which are ignored internally and
 could be any values.
 
@@ -95,8 +95,8 @@ const npm = Command({
   commands: [install]
 });
 
-const aliasOptions = parse(npm, ['!', '@', 'i']);
-const fullOptions = parse(npm, ['!', '@', 'install']);
+const aliasOptions = parse(npm, [,, 'i']);
+const fullOptions = parse(npm, [,, 'install']);
 assert.deepEqual(aliasOptions, fullOptions);
 ```
 
@@ -127,12 +127,12 @@ const c1 = Command({name: 'c1', options: [o1], commands: [c2]});
 const o0 = Option({name: '--val', key: 'val', type: Type.Empty(0)});
 const c0 = Command({name: 'c0', options: [o0], commands: [c1]});
 
-assert.equal(parse(c0, ['!', '@', '--val']).val, 0);
-assert.equal(parse(c0, ['!', '@', 'c1', '--val']).val, 1);
-assert.equal(parse(c0, ['!', '@', '--val', 'c1']).val, 1);
-assert.equal(parse(c0, ['!', '@', 'c1', 'c2', '--val']).val, 2);
-assert.equal(parse(c0, ['!', '@', 'c1', '--val', 'c2']).val, 2);
-assert.equal(parse(c0, ['!', '@', '--val', 'c1', 'c2']).val, 2);
+assert.equal(parse(c0, [,, '--val']).val, 0);
+assert.equal(parse(c0, [,, 'c1', '--val']).val, 1);
+assert.equal(parse(c0, [,, '--val', 'c1']).val, 1);
+assert.equal(parse(c0, [,, 'c1', 'c2', '--val']).val, 2);
+assert.equal(parse(c0, [,, 'c1', '--val', 'c2']).val, 2);
+assert.equal(parse(c0, [,, '--val', 'c1', 'c2']).val, 2);
 ```
 
 ### Modular subcommand definitions
@@ -179,7 +179,7 @@ const greet = Command({
   options: [name, repeat]
 });
 
-const options = parse(greet, ['!', '@', '-m2']);
+const options = parse(greet, [,, '-m2']);
 assert.equal(options.name, 'Mason');
 assert.equal(options.repeat, 2);
 while(options.repeat--) console.log('Hello', options.name);
@@ -376,13 +376,13 @@ const tool = require('./my-cli-tool');
 const Help = Command({name: 'help'});
 tool.commands.push(Help);
 
-const options = parse(tool, ['!', '@', 'help']);
+const options = parse(tool, [,, 'help']);
 const info = help(tool, options);
 /* => Without any arguments, `info` will contain a multi-line string
       description containing the command's aliases, subcommands, and
       flags grouped logically where applicable. */
 
-const {path} = parse(tool, ['!', '@', 'help', 'subcommand']);
+const {path} = parse(tool, [,, 'help', 'subcommand']);
 const isHelp = path.length > 1 && path[1].name === 'help';
 if(isHelp) {
   console.log(help(tool, options));
