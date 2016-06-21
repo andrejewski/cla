@@ -211,7 +211,7 @@ just leaves the developer with the work of maintaining them internally.
 
 The `Type` construct is very simple but just having it makes a slew of
 concerns fall away and makes problems easier to solve. All `Option` 
-constructs require a type, even if they takes no arguments (i.e. 
+constructs require a type, even if they do not take arguments (i.e. 
 `Type.Empty`). Type coersion is no problem, just pass the right type to
 each option.
 

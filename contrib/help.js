@@ -26,21 +26,23 @@ function argumentHelp(parent, args) {
 
 function commandHelp(command, parent) {
   const title = commandTitle(command, parent);
-  const aliases = gridFit(command.aliases.map(aliasTitle));
-  const commands = command.commands.map((cmd) => {
+  const aliases = gridFit(command.aliases
+    .filter(alias => !isDirectRef(alias, command))
+    .map(aliasTitle));
+  const commands = collect(command.commands.map((cmd) => {
     return commandTitle(cmd, command);
-  });
-  const options = command.options.map((option) => {
-    return optionTitle(command, option);
-  });
+  }));
+  const options = collect(command.options.map((option) => {
+    return optionTitle(option, command);
+  }));
   const flags = gridFit(command.flags
-    .filter((flag) => flag.value.length > 1)
+    .filter(flag => !isDirectRef(flag, command))
     .map(flagTitle));
 
-  const aliasSection = section('Aliases', aliases);
-  const commandSection = section('Commands', commands);
-  const optionSection = section('Options', options);
-  const flagSection = section('Flags', flags);
+  const aliasSection = section('ALIASES', aliases);
+  const commandSection = section('COMMANDS', commands);
+  const optionSection = section('OPTIONS', options);
+  const flagSection = section('FLAGS', flags);
 
   return title
     .concat('')
@@ -50,6 +52,7 @@ function commandHelp(command, parent) {
 }
 
 function gridFit(table) {
+  if(!table.length) return [];
   const columns = table[0].length;
   let sizes = [];
   for(let i = 0; i < columns; i++) {
@@ -71,6 +74,12 @@ function padRight(word, padding, len) {
   return word;
 }
 
+function collect(list) {
+  return list.reduce((list, slice) => {
+    return list.concat(slice);
+  }, []);
+}
+
 function aliasTitle(alias) {
   return [alias.name, '=>', stringExpansion(alias.value)];
 }
@@ -84,30 +93,40 @@ function stringExpansion(expansion) {
 }
 
 function commandTitle(command, parent) {
-  const {name, verson, description} = command;
+  const {name, version, description} = command;
   const names = directRefs(command, parent).concat(name);
   let title = `${names.join(', ')}`;
   if(version) title += ` (${version})`;
   let lines = [title];
-  if(description) lines.push(ident(description));
+  if(description) lines.push(indent(description));
   return lines;
 }
 
 function optionTitle(option, command) {
   const {name, type, description} = option;
   const names = directRefs(option, command).concat(name);
-  let title = `${name.join(', ')}`;
+  let title = `${names.join(', ')}`;
   if(type.parameters) title + ` ${type.parameters}`;
   let lines = [title];
   if(description) lines.push(indent(description));
   return lines;
 }
 
+function isDirectRef(x, command) {
+  if(x.value.length !== 1) return false;
+  const z = x.value[0];
+  const target = []
+    .concat(command.commands)
+    .concat(command.options)
+    .find((y) => dumbEqual(z, y));
+  return !!target;
+}
+
 function directRefs(x, command) {
   if(!command) return [];
   const {aliases, flags} = command;
   return aliases.concat(flags)
-    .filter(y => directTo(y, x))
+    .filter(y => directsTo(y, x))
     .map(y => y.name ? y.name : y);
 }
 

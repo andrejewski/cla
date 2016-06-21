@@ -10,33 +10,32 @@ Runner.prototype.use = function use(command, runner) {
     command = null;
   }
   this.routes.push({command, runner});
+  return this;
 }
 
 Runner.prototype.run = function run(options, callback) {
+  callback = callback || function() {};
   options.originalPath = options.originalPath || options.path.slice(0);
-  const command = options.path.shift();
-  run(this.routes, options, function() {
-    options.path.unshift(command);
-    if(callback) callback(...arguments);
-  });
+  process(this.routes, options, callback);
+  return this;
 }
 
 function process(routes, options, callback) {
   let routeIndex = 0;
   const next = (error) => {
     if(error) return callback(error);
-    let route;
-    while(route = routes[routeIndex++]) {
-      if(isPathRoute(options.path[0], route.command)) break;      
-    }
+    const route = routes
+      .slice(routeIndex++)
+      .find((route) => isPathRoute(options.path[0], route.command));
     if(!route) return callback(null);
-    let level;
-    if(command) level = options.path.shift();
-    exec(route, options, function() {
+    const {runner, command} = route;
+    const level = command && options.path.shift();
+    exec(runner, options, function() {
       if(level) options.path.unshift(level);
       next(...arguments);
     });
   };
+  next();
 }
 
 function isPathRoute(route, command) {
