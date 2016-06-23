@@ -65,6 +65,18 @@ describe('parse(command Command, args Array<string>) options Object', () => {
       assert.deepEqual(args, [silent]);
     });
 
+    it('should only expand aliases with commands when in the parent scope', () => {
+      const install = Command({name: 'install'});
+      const i = Alias('i', install);
+      const npm = Command({
+        name: 'npm',
+        aliases: [i],
+        commands: [install]
+      });
+      const {args} = expandArgs(npm, ['install', 'i']);
+      assert.deepEqual(args, [install, 'i']);
+    });
+
     it('should ignore unknown options', () => {
       const sh = Command({
         name: 'sh'
@@ -90,6 +102,36 @@ describe('parse(command Command, args Array<string>) options Object', () => {
       const argv = ['--', 'F'];
       const {args} = expandArgs(sh, argv.slice(0));
       assert.deepEqual(args, argv);
+    });
+
+    it('should keep expanding passed the double dash if `disableDoubleDash`', () => {
+      const force = Option({
+        name: '--force',
+        key: 'force',
+        type: Type.Empty(true)
+      });
+      const F = Alias('F', force);
+      const sh = Command({
+        name: 'sh',
+        aliases: [F],
+        options: [force],
+        disableDoubleDash: true
+      });
+      const argv = ['--', 'F'];
+      const {args} = expandArgs(sh, argv.slice(0));
+      assert.deepEqual(args, ['--', force]);
+    });
+
+    it('should only expand flags with commands when in the parent scope', () => {
+      const install = Command({name: 'install'});
+      const i = Flag('-i', install);
+      const npm = Command({
+        name: 'npm',
+        aliases: [i],
+        commands: [install]
+      });
+      const {args} = expandArgs(npm, ['install', '-i']);
+      assert.deepEqual(args, [install, '-i']);
     });
 
     it('should split flag groups', () => {
@@ -193,6 +235,21 @@ describe('parse(command Command, args Array<string>) options Object', () => {
       });
       const options = expandOptions([sh], ['--', name, 'tyler']);
       assert.deepEqual(options.args, [name, 'tyler']);
+    });
+
+    it('should parse passed the double dash if `disableDoubleDash`', () => {
+      const name = Option({
+        name: '--name',
+        key: 'name',
+        type: Type.String
+      });
+      const sh = Command({
+        name: 'sh',
+        options: [name],
+        disableDoubleDash: true
+      });
+      const {args} = expandOptions([sh], ['--', name, 'tyler']);
+      assert.deepEqual(args, ['--']);
     });
   });
 });
