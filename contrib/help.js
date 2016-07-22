@@ -1,4 +1,3 @@
-
 function help(command, options) {
   const {args} = options;
   if(!args.length) {
@@ -149,7 +148,6 @@ function section(title, list) {
 
 function indent(line) {
   return '  ' + line;
-} 
+}
 
 module.exports = help;
-

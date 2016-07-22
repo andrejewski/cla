@@ -10,11 +10,11 @@ npm install cla
 ## Features
 
 - Aliases expand as arguments are parsed
-- Infinitely nestable subcommands
+- Infinitely nest-able subcommands
 - Modular subcommand definitions
 - Flag group expansions `-abc => -a -b -c`
 - Double dash `--` ends parsing (by default)
-- Type coersion and extensible type system for option arguments
+- Type coercion and extensible type system for option arguments
 - Optional Express-style `Runner` for command paths
 - Optional automatic `help` output generator
 - Strict parsing: unknown options are not parsed
@@ -50,7 +50,7 @@ console.log(words);
 
 ```sh
 echo Hello World
-# => "Hello World" 
+# => "Hello World"
 ```
 
 ```sh
@@ -69,7 +69,7 @@ Command-Line Awesome is designed to be as clear as possible regarding the
 structure of the command-line tool. While `Command` and `Option` may seem
 especially verbose compared to chaining-based option parsers like
 `commander`, the goal of this project is to make intents obvious without
-any obsurities or hidden side-effects. **The tools created with `cla` work
+any obscurities or hidden side-effects. **The tools created with `cla` work
 like they read.**
 
 Throughout these feature explanations "atomics" describe the constructs of
@@ -103,11 +103,11 @@ assert.deepEqual(aliasOptions, fullOptions);
 **Warning:** Aliases are so powerful they should be used sparingly. Deciding to use
 an alias should require the same amount of consideration as "should I
 write a macro for this?" in Lisp or C. Aliases can expand to other aliases,
-even the same alias. You may find yourself with infinite expansions. 
+even the same alias. You may find yourself with infinite expansions.
 
 > True programming power is measured of how many ways to can shoot yourself in the foot.
 
-### Infinitely nestable subcommands
+### Infinitely nest-able subcommands
 Commands can be nested as deep as need be. As the arguments are parsed, a
 command path is generated creating a scope for option parsing. Each command
 essentially has a closure around each of its subcommands where only the
@@ -203,16 +203,16 @@ const tool = Command({
 const options = parse(tool, process.argv);
 ```
 
-### Type coersion and extensible type system for option arguments
+### Type coercion and extensible type system for option arguments
 Some option parsers take pride in how dumb they are, making the
 developer do all the work in the end regarding inputs.
 This is fine for simple programs, but pretending types don't exist
 just leaves the developer with the work of maintaining them internally.
 
 The `Type` construct is very simple but just having it makes a slew of
-concerns fall away and makes problems easier to solve. All `Option` 
-constructs require a type, even if they do not take arguments (i.e. 
-`Type.Empty`). Type coersion is no problem, just pass the right type to
+concerns fall away and makes problems easier to solve. All `Option`
+constructs require a type, even if they do not take arguments (i.e.
+`Type.Empty`). Type coercion is no problem, just pass the right type to
 each option.
 
 ```js
@@ -328,7 +328,7 @@ const tool = require('./my-cli-tool');
 const Help = Command({name: 'help'});
 tool.commands.push(Help);
 
-const main = Runner()
+const main = (new Runner())
   .use((options, next) => {
     // will be called every time
     next();
@@ -343,7 +343,7 @@ const main = Runner()
     // the above is more maintainable if the name changes
     next();
   })
-  .use('version', Runner()
+  .use('version', (new Runner())
     .use((options, next) => {
       // Runners accept other Runners just like functions
       console.log(require('./package.json').version);
@@ -355,7 +355,7 @@ const options = parse(tool, process.argv);
 main.run(options, (error) => {
   // if any route passes an error to next, execution
   // stops and that error is passes here
-  
+
   // if there is no error, this will be called when
   // all routes have been exhausted
 });
@@ -399,8 +399,8 @@ Worse, some option parsers will have default intents for adding unknown values t
 the final `options` object that may not be understood by the developer.
 Instead of allowing mistakes to "fall through" unknown options will be included
 in the final `options.args` array returned by `parse`. This allows developers
-to assist the user use the tool properly from simply throwing an error for 
-unrecognized options and arguments up to returning "Did you mean" sugguestions.
+to assist the user use the tool properly from simply throwing an error for
+unrecognized options and arguments up to returning "Did you mean" suggestions.
 
 ### Does not modify `process.argv`
 The first two elements of `process.argv` are ignored by the parser. If the original

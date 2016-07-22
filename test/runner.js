@@ -1,10 +1,10 @@
-
 const assert = require('assert');
-const Runner = require('../contrib/runner');
+const runner = require('../contrib/runner');
+const Runner = () => new runner();
 
-describe('Runner()', function() {
+describe('Runner', function() {
   describe('use([command Command|string,] callback Runner|Function(error, next))', function() {
-  
+
   });
   describe('run(options Object[, callback Function(error)])', function() {
     it('should run the routes in order', function(next) {
@@ -73,7 +73,7 @@ describe('Runner()', function() {
         assert.equal(options.path[0], command0);
         next();
       };
-      
+
       const runner1 = (options, next) => {
         assert.equal(options.originalPath[0], command0);
         assert.equal(options.path[0], command1);
@@ -102,4 +102,3 @@ describe('Runner()', function() {
     });
   });
 });
-

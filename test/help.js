@@ -1,4 +1,3 @@
-
 const assert = require('assert');
 const help = require('../contrib/help');
 const {parse, Alias, Command, Flag, Option, Type} = require('..');
@@ -84,4 +83,3 @@ describe('help(command Command, options Object) docs string?', () => {
     });
   });
 });
-

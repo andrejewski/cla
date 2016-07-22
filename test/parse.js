@@ -1,4 +1,3 @@
-
 const cla = require('..');
 const assert = require('assert');
 
@@ -16,7 +15,7 @@ describe('parse(command Command, args Array<string>) options Object', () => {
 
   describe('expandArgs(root Command, args Array<string>) {path Array<Command>, args Array<Command|Option|string>}', () => {
     const {expandArgs} = parse;
-    
+
     it('should expand an alias to a command', () => {
       const install = Command({name: 'install'});
       const i = Alias('i', install);
@@ -29,7 +28,7 @@ describe('parse(command Command, args Array<string>) options Object', () => {
       const {args} = expandArgs(npm, ['i']);
       assert.deepEqual(args, [install]);
     });
-    
+
     it('should expand an alias to an option', () => {
       const force = Option({
         name: '--force',
@@ -182,7 +181,7 @@ describe('parse(command Command, args Array<string>) options Object', () => {
         type: Type.String
       });
       const sh = Command({
-        name: 'sh', 
+        name: 'sh',
         options: [name]
       });
       const {args} = expandArgs(sh, ['--name=chris']);
@@ -253,4 +252,3 @@ describe('parse(command Command, args Array<string>) options Object', () => {
     });
   });
 });
-

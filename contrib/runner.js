@@ -1,25 +1,3 @@
-
-function Runner() {
-  if(!(this instanceof Runner)) return new Runner();
-  this.routes = [];
-}
-
-Runner.prototype.use = function use(command, runner) {
-  if(!runner) {
-    runner = command;
-    command = null;
-  }
-  this.routes.push({command, runner});
-  return this;
-}
-
-Runner.prototype.run = function run(options, callback) {
-  callback = callback || function() {};
-  options.originalPath = options.originalPath || options.path.slice(0);
-  process(this.routes, options, callback);
-  return this;
-}
-
 function process(routes, options, callback) {
   let routeIndex = 0;
   const next = (error) => {
@@ -53,5 +31,26 @@ function exec(runner, options, callback) {
   }
 }
 
-module.exports = Runner;
+class Runner {
+  constructor() {
+    this.routes = [];
+  }
 
+  use(command, runner) {
+    if(!runner) {
+      runner = command;
+      command = null;
+    }
+    this.routes.push({command, runner});
+    return this;
+  }
+
+  run(options, callback) {
+    callback = callback || function() {};
+    options.originalPath = options.originalPath || options.path.slice(0);
+    process(this.routes, options, callback);
+    return this;
+  }
+}
+
+module.exports = Runner;

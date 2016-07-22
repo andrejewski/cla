@@ -1,31 +1,31 @@
 {
   "name": "cla",
-  "version": "0.0.3",
   "description": "command-line awesome",
-  "main": "index.js",
-  "scripts": {
-    "test": "mocha"
+  "version": "0.0.3",
+  "author": "Chris Andrejewski <christopher.andrejewski@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/andrejewski/cla/issues"
   },
+  "devDependencies": {
+    "mocha": "^2.5.3"
+  },
+  "homepage": "https://github.com/andrejewski/cla#readme",
+  "keywords": [
+    "alias",
+    "argument",
+    "bash",
+    "cli",
+    "flag",
+    "option",
+    "parser"
+  ],
+  "license": "ISC",
+  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/andrejewski/cla.git"
   },
-  "keywords": [
-    "cli",
-    "bash",
-    "argument",
-    "option",
-    "flag",
-    "alias",
-    "parser"
-  ],
-  "author": "Chris Andrejewski <christopher.andrejewski@gmail.com>",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/andrejewski/cla/issues"
-  },
-  "homepage": "https://github.com/andrejewski/cla#readme",
-  "devDependencies": {
-    "mocha": "^2.5.3"
+  "scripts": {
+    "test": "mocha"
   }
 }
